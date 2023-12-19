@@ -13,46 +13,49 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-
   List<Data> userDataList = [];
   TextEditingController controller = TextEditingController();
+  ScrollController scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-      body: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
+    return Scaffold(
+      body: SafeArea(
 
-        child: Column(
-          children: [
-            SearchWidgetView(
-              onChanged: (value) {
-                controller.text = value;
-                searchByName(value);
-              },
-              txtController: controller,
-              onSubmitted: (value) {
-                controller.text = value;
-                searchByName(value);
-              },
-            ),
-            ListView.builder(
-                itemCount: userDataList.length,
-                shrinkWrap: true,
-                physics: const AlwaysScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return EmployeeProfile(
-                    name: userDataList[index].employeeName,
-                    age: userDataList[index].employeeAge.toString(),
-                    image: userDataList[index].profileImage,
-                    salary: userDataList[index].employeeSalary.toString(),
-                  );
-                }),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height*0.85,
+                child: ListView.builder(
+                    itemCount: userDataList.length,
+                    shrinkWrap: true,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return EmployeeProfile(
+                        name: userDataList[index].employeeName,
+                        age: userDataList[index].employeeAge.toString(),
+                        image: userDataList[index].profileImage,
+                        salary: userDataList[index].employeeSalary.toString(),
+                      );
+                    }),
+              ),
+              SearchWidgetView(
+                onChanged: (value) {
+                  controller.text = value;
+                  searchByName(value);
+                },
+                txtController: controller,
+                onSubmitted: (value) {
+                  controller.text = value;
+                  searchByName(value);
+                },
+              ),
+            ],
+          ),
         ),
       ),
-    ));
+    );
   }
 
   Future<void> getData() async {
